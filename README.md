@@ -59,3 +59,5 @@ Once Python is installed, you need to install the project's dependencies.
 - The application needs API keys to connect to the AI services (Google Gemini, OpenAI, etc.).
 - You will see input fields in the UI to enter your API keys.
 - Your keys are used by the local server running on your machine to communicate with the AI providers. They are not stored permanently or shared with anyone else. 
+
+**Note:** As an alternative to entering keys in the UI, you can set them as environment variables. The application will automatically use them if no key is provided in the UI. The variable names are `GEMINI_API_KEY`, `OPENAI_API_KEY`, and `ANTHROPIC_API_KEY`. 
