@@ -1,0 +1,27 @@
+CONVERSATION MANAGER - QUICK START
+==================================
+
+SETUP:
+1. Install dependencies:
+   pip install -r requirements.txt
+
+2. Add your API keys in conversation_manager.py:
+   - Line 17: Replace "GEMINI_API_KEY" with your Google Gemini key
+   - Line 18: Replace "OPENAI_API_KEY" with your OpenAI key
+   - Line 19: Replace "ANTHROPIC_API_KEY" with your Anthropic key
+
+3. Run:
+   python conversation_manager.py
+
+4. Open browser:
+   http://127.0.0.1:5001
+
+FILES:
+- conversation_manager.py (main app)
+- conversationManager.json (configurations)
+- templates/index.html (web UI)
+- requirements.txt (dependencies)
+
+USAGE:
+Select conversation type → Enter prompt → Click "Run Conversation"
+Use Pause/Resume buttons to control flow 

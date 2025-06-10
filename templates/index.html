@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Conversation Orchestrator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(16, 20, 39, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --neon-purple: #a855f7;
+            --neon-blue: #3b82f6;
+            --neon-pink: #ec4899;
+            --success-green: #10b981;
+            --danger-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Static background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        /* Glassmorphism cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 12px 40px 0 rgba(31, 38, 135, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        h2, h3, h4, h5 {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Form controls */
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        /* Custom dropdown styling with better browser support */
+        .form-select {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            color: var(--text-primary) !important;
+            border-color: var(--neon-purple) !important;
+        }
+
+        /* Style dropdown options - comprehensive approach */
+        .form-select option {
+            background-color: var(--dark-bg) !important;
+            background: var(--dark-bg) !important;
+            color: var(--text-primary) !important;
+            padding: 12px 16px !important;
+            border: none !important;
+        }
+
+        .form-select option:hover {
+            background-color: rgba(168, 85, 247, 0.8) !important;
+            background: rgba(168, 85, 247, 0.8) !important;
+            color: white !important;
+        }
+
+        .form-select option:checked,
+        .form-select option:selected {
+            background-color: var(--neon-purple) !important;
+            background: var(--neon-purple) !important;
+            color: white !important;
+        }
+
+        /* Additional styling for WebKit browsers */
+        .form-select::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .form-select::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        .form-select::-webkit-scrollbar-thumb {
+            background: var(--neon-purple);
+            border-radius: 4px;
+        }
+
+        /* Force dark theme on select dropdown */
+        .form-select {
+            color-scheme: dark;
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px 0 rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-outline-success {
+            background: transparent;
+            border: 2px solid var(--success-green);
+            color: var(--success-green);
+        }
+
+        .btn-outline-success:hover {
+            background: var(--success-green);
+            color: white;
+            border-color: var(--success-green);
+            box-shadow: 0 4px 15px 0 rgba(16, 185, 129, 0.4);
+        }
+
+        /* Agent cards */
+        .agent-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .agent-card:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .agent-card-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .agent-card-body {
+            padding: 1.5rem;
+        }
+
+        .agent-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 0.75rem;
+            color: white;
+        }
+
+        /* Response boxes */
+        .response-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .response-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+        }
+
+        /* Dev note */
+        .dev-note {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dev-note i {
+            font-size: 1.2rem;
+        }
+
+        /* Tooltips */
+        [title] {
+            position: relative;
+            cursor: help;
+        }
+
+        /* Loading spinner */
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+            border-width: 2px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Developer Credit Section */
+        .developer-credit {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .developer-credit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+
+        .developer-credit-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .developer-name {
+            color: var(--neon-purple);
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .developer-message,
+        .developer-feedback,
+        .developer-opportunity {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .developer-opportunity {
+            margin-bottom: 1.5rem;
+        }
+
+        .linkedin-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0px 8px 15px rgba(0, 119, 181, 0.3);
+            direction: rtl;
+        }
+
+        .linkedin-link:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0px 12px 25px rgba(0, 119, 181, 0.5);
+            color: white;
+            text-decoration: none;
+        }
+
+        .linkedin-link i {
+            font-size: 1.2rem;
+        }
+
+        /* Section dividers */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin: 3rem 0;
+        }
+
+        .guide-link-banner {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .guide-link-banner a {
+            background: var(--secondary-gradient);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0px 10px 20px rgba(245, 87, 108, 0.2);
+        }
+
+        .guide-link-banner a:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0px 15px 30px rgba(245, 87, 108, 0.4);
+            color: white;
+        }
+
+        /* Guide section */
+        .guide-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .guide-section h4 {
+            color: var(--neon-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .guide-section h5 {
+            color: var(--neon-purple);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .guide-section h6 {
+            color: var(--neon-pink);
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .guide-section code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--neon-blue);
+        }
+
+        .guide-section pre {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .guide-section pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        /* Model select special styling */
+        .model-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a855f7' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        /* Enhanced dropdown interaction */
+        .form-select:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.5);
+            cursor: pointer;
+        }
+
+        /* Custom styling for dropdown when open */
+        .form-select:focus-within {
+            background: rgba(168, 85, 247, 0.15);
+            box-shadow: 
+                0 0 0 3px rgba(168, 85, 247, 0.2),
+                0 10px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Enhanced Response Styling */
+        .formatted-response {
+            font-family: 'Inter', sans-serif;
+            white-space: normal;
+            line-height: 1.8;
+        }
+
+        /* Simplified Agent Response Styling */
+        .agent-response-block {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .agent-response-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .agent-response-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--neon-purple);
+        }
+
+        .agent-response-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .agent-response-body {
+            padding-left: 3.5rem; /* Aligns with text, past the icon */
+        }
+        
+        .agent-header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dialogue Styling */
+        .dialogue-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .dialogue-line {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .dialogue-speaker {
+            font-weight: 600;
+            color: var(--neon-blue);
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .dialogue-text {
+            flex: 1;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        /* Section Separator */
+        .conversation-separator {
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--neon-purple), transparent);
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .conversation-separator::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark-bg);
+            padding: 0 1rem;
+            color: var(--neon-purple);
+            font-size: 1.5rem;
+        }
+
+        /* Code Block Styling */
+        .formatted-code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .formatted-code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #58a6ff;
+            line-height: 1.5;
+        }
+
+        /* Inline Code */
+        .formatted-response code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--neon-blue);
+        }
+
+        /* Lists */
+        .formatted-response ol, .formatted-response ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .formatted-response li {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Strong text */
+        .formatted-response strong {
+            color: var(--neon-pink);
+            font-weight: 600;
+        }
+
+        /* Warning/Info boxes */
+        .info-box {
+            background: rgba(79, 172, 254, 0.1);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #79acfe;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #fbbf24;
+        }
+
+        /* Initial Prompt Box */
+        .initial-prompt-box {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .initial-prompt-label {
+            font-weight: 600;
+            color: var(--neon-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Persona icon */
+        .persona-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* Thinking animation */
+        .thinking-indicator::after {
+            content: '...';
+            display: inline-block;
+            animation: thinking-dots 1.4s infinite;
+            animation-timing-function: steps(4, end);
+            width: 0px;
+            overflow: hidden;
+            vertical-align: bottom;
+        }
+
+        @keyframes thinking-dots {
+            0% { width: 0; }
+            33% { width: 0.6em; } /* . */
+            66% { width: 1.2em; } /* .. */
+            100% { width: 1.8em; } /* ... */
+        }
+
+        /* Privacy Notice */
+        .privacy-notice {
+            background: rgba(79, 172, 254, 0.1);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .privacy-notice i {
+            color: #79acfe;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Creator Credit -->
+        <div class="text-center mb-3">
+            <small class="text-secondary">
+                Created by Yoni Bar 
+                <a href="https://www.linkedin.com/in/john-bar-42722921/" target="_blank" class="text-secondary ms-1" style="text-decoration: none;">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </small>
+        </div>
+        
+        <div class="guide-link-banner">
+            <a href="#guide-section">Explore this comprehensive guide with expert techniques!</a>
+        </div>
+
+        <h1>
+            <i class="fas fa-robot"></i> AI Conversation Orchestrator
+        </h1>
+        <p class="subtitle">Design and execute multi-agent conversational flows with cutting-edge AI models</p>
+
+        <div class="dev-note">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <strong>Developer Mode Active</strong> - Console logging enabled
+            </div>
+        </div>
+
+        <form id="main-form">
+            <div class="privacy-notice">
+                <i class="fas fa-shield-alt"></i>
+                <strong>Privacy Notice:</strong> This application requires a personal API key from the respective AI service providers. Data is sent directly from your browser to the AI service and is not stored or transmitted to us in any way. You're welcome to download the source code and run the application completely locally on your computer.
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="mb-4"><i class="fas fa-key"></i> API Key Configuration</h3>
+                <p class="text-secondary mb-3" style="font-size: 0.9rem;">
+                    Provide API keys below to use for the conversation. If left blank, the application will attempt to use keys from your system's environment variables.
+                </p>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="gemini-api-key" class="form-label"><i class="fas fa-gem"></i> Gemini API Key</label>
+                        <input type="password" id="gemini-api-key" class="form-control" placeholder="Optional: Enter Gemini key">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="openai-api-key" class="form-label"><i class="fab fa-dev"></i> OpenAI API Key</label>
+                        <input type="password" id="openai-api-key" class="form-control" placeholder="Optional: Enter OpenAI key">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="anthropic-api-key" class="form-label"><i class="fas fa-robot"></i> Anthropic API Key</label>
+                        <input type="password" id="anthropic-api-key" class="form-control" placeholder="Optional: Enter Anthropic key">
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-comments"></i> Conversation Selection
+                </h3>
+                <div class="mb-3">
+                    <label for="conversation_name" class="form-label">
+                        <i class="fas fa-folder-open"></i> Active Conversation
+                    </label>
+                    <select name="conversation_name" id="conversation_name" class="form-select model-select">
+                        {% for name in conversation_names %}
+                        <option value="{{ name }}" {% if name == selected_conversation %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div id="config-editor"></div>
+            
+            <div class="text-center mb-4">
+                <button type="button" id="save-config-btn" class="btn btn-success">
+                    <i class="fas fa-save"></i> Save Configuration
+                </button>
+            </div>
+            <textarea name="config_json" id="config_json" style="display:none;"></textarea>
+
+            <div class="section-divider"></div>
+
+            <div class="glass-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-play-circle"></i> Execute Conversation
+                </h3>
+                <div class="mb-4">
+                    <label for="prompt" class="form-label">
+                        <i class="fas fa-message"></i> Initial Prompt
+                    </label>
+                    <textarea name="prompt" id="prompt" rows="4" class="form-control" placeholder="Enter your prompt to start the conversation...">{{ prompt or '' }}</textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" id="run-conversation-btn">
+                        <i class="fas fa-rocket"></i> Run Conversation
+                    </button>
+                    <button type="button" class="btn btn-warning" id="pause-conversation-btn" style="display: none;">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button type="button" class="btn btn-danger" id="stop-conversation-btn" style="display: none;">
+                        <i class="fas fa-stop"></i> Stop Conversation
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div id="result-container" class="mt-4" style="display: none;">
+            <div class="glass-card">
+                <h3><i class="fas fa-check-circle" style="color: var(--success-green);"></i> Final Response</h3>
+                <div id="final-response-box" class="response-box"></div>
+            </div>
+            
+            <!-- Developer Credit Section -->
+            <div id="developer-credit-section" class="developer-credit mt-4" style="display: none;">
+                <div class="developer-credit-content">
+                    <h6 class="developer-name">פותח על ידי יוני בר</h6>
+                    <p class="developer-message">אני מקווה שהכלי הזה שימושי עבורכם!</p>
+                    <p class="developer-feedback">יש לכם פידבק או רעיון לשיפור? אשמח לשמוע.</p>
+                    <p class="developer-opportunity">בימים אלה אני בוחן הזדמנויות חדשות בהנדסת תוכנה.</p>
+                    <a href="https://www.linkedin.com/in/john-bar-42722921/" target="_blank" class="linkedin-link">
+                        <i class="fab fa-linkedin"></i> בואו נתחבר בלינקדאין
+                    </a>
+                </div>
+            </div>
+            
+            <div class="glass-card mt-4">
+                <h3><i class="fas fa-history"></i> Conversation History</h3>
+                <div id="history-response-box" class="response-box"></div>
+            </div>
+        </div>
+
+        <div class="guide-section" id="guide-section">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-book"></i> Configuration Guide
+            </h2>
+            <p class="text-center text-secondary mb-4">Master the art of multi-agent conversation design</p>
+            
+            <h4><i class="fas fa-layer-group"></i> High-Level Overview</h4>
+            <p>The configuration defines a set of conversational flows. Each flow, identified by a unique name, orchestrates a structured conversation between multiple AI "agents." These agents respond sequentially, each building upon the previous agent's response, to collaboratively address a user's prompt.</p>
+
+            <h4><i class="fas fa-cogs"></i> Configuration Breakdown</h4>
+            
+            <h5><i class="fas fa-quote-left"></i> "opening_statement"</h5>
+            <p><strong>Role:</strong> A global instruction or context-setter for the entire conversation.</p>
+            <p><strong>Purpose:</strong> To provide shared context, ground rules, or a scenario that applies to all agents involved.</p>
+            <p><em>Example: "You are a panel of experts debating the future of renewable energy."</em></p>
+
+            <h5><i class="fas fa-users"></i> "agents": [ ... ]</h5>
+            <p><strong>Role:</strong> A list containing the definitions for each agent that will participate in the conversation.</p>
+            <p><strong>Purpose:</strong> To define the sequence of the conversation.</p>
+
+            <h6><i class="fas fa-id-badge"></i> "agent_name"</h6>
+            <p>The identity or persona of the AI agent (e.g., "Michael" or "Experienced Software Engineer").</p>
+
+            <h6><i class="fas fa-brain"></i> "model"</h6>
+            <p>Specifies which Large Language Model to use: "Gemini-2.5-pro", "Claude-Opus-4", "o3", or empty for default.</p>
+
+            <h6><i class="fas fa-arrow-right"></i> "prefix"</h6>
+            <p>A direct instruction defining the agent's primary role or goal.</p>
+
+            <h6><i class="fas fa-crosshairs"></i> "context"</h6>
+            <p>A reinforcing instruction for the agent, added after the conversation history.</p>
+
+            <h6><i class="fas fa-signature"></i> "suffix"</h6>
+            <p>A concluding statement attached to the agent's response.</p>
+
+            <h5><i class="fas fa-quote-right"></i> "closing_statement"</h5>
+            <p>A final statement to conclude the conversation.</p>
+
+            <h4><i class="fas fa-code"></i> Examples</h4>
+            
+            <h5>Example 1: Customer Support Triaging</h5>
+            <pre><code>{
+  "customer_support_flow": {
+    "opening_statement": "A customer has submitted a support ticket. Your goal is to resolve it efficiently.",
+    "agents": [
+      {
+        "agent_name": "Tier 1 Support Bot",
+        "prefix": "Your job is to understand the user's issue and categorize it.",
+        "context": "Categorize as 'Technical', 'Billing', or 'General Inquiry'.",
+        "suffix": "",
+        "model": "Gemini-2.5-pro"
+      },
+      {
+        "agent_name": "Technical Specialist",
+        "prefix": "You are a technical expert. Provide solutions for technical issues.",
+        "context": "Provide a clear, concise solution.",
+        "suffix": "Regards, Tech Support",
+        "model": "Claude-Opus-4"
+      }
+    ],
+    "closing_statement": "Thank you for contacting support."
+  }
+}</code></pre>
+
+                         <h5>Example 2: Creative Writing Assistant</h5>
+             <pre><code>{
+   "story_generator": {
+     "opening_statement": "Let's write a short story together.",
+     "agents": [
+       {
+         "agent_name": "The Plotter",
+         "prefix": "Based on the user's prompt, outline a three-act plot.",
+         "context": "Focus on creating a clear beginning, middle, and end.",
+         "suffix": "--- Plot Outline Complete ---",
+         "model": "o3"
+       },
+       {
+         "agent_name": "The Narrator",
+         "prefix": "Take the plot outline and write the full story.",
+         "context": "Write an engaging narrative.",
+         "suffix": "The End.",
+         "model": "Claude-Opus-4"
+       }
+     ],
+     "closing_statement": ""
+   }
+ }</code></pre>
+
+             <h4><i class="fas fa-star"></i> Pro-Tips for Effective Configuration</h4>
+             <p>Leverage these strategies, derived from recent AI research, to elevate your agent configurations from good to great.</p>
+
+             <h5><i class="fas fa-theater-masks"></i> 1. Design Complementary & Diverse Roles</h5>
+             <p>Ensure each agent has a unique, well-defined purpose to prevent overlap and ensure comprehensive task coverage. Think of your agents like a specialized team.</p>
+             <ul>
+                 <li><strong>Specialize:</strong> Assign distinct roles like "Planner," "Executor," "Critic," and "Summarizer."</li>
+                 <li><strong>Include a Contrarian:</strong> For critical tasks, add a "Devil's Advocate" agent. Its job is to challenge assumptions and find weaknesses. This drastically improves the robustness of the final output by preventing AI groupthink.</li>
+             </ul>
+
+             <h5><i class="fas fa-sitemap"></i> 2. Orchestrate the Conversation Flow</h5>
+             <p>Don't leave the conversation to chance. A structured flow keeps agents on task and builds momentum.</p>
+             <ul>
+                 <li><strong>Define Turn-Taking:</strong> A simple, strict sequence (Agent 1 → Agent 2 → Agent 3) is highly effective. It prevents agents from talking over each other or getting stuck in loops.</li>
+                 <li><strong>Use Phased Approaches:</strong> For complex projects, break the task into phases (e.g., Design, Code, Test) and have agents collaborate in a structured "chat chain" within each phase.</li>
+             </ul>
+
+             <h5><i class="fas fa-magic"></i> 3. Master Your Prompting Technique</h5>
+             <p>The quality of your prompts directly determines the quality of the output.</p>
+             <ul>
+                 <li><strong>Use the Second-Person Imperative:</strong> Always frame instructions as a direct command: <code>You are a...</code> or <code>Your task is to...</code>. This is more effective than the first-person (<code>I am a...</code>).</li>
+                 <li><strong>Give Names and Personas:</strong> Assigning human-like names (e.g., "Alice the Analyst") makes the AI's behavior more consistent and the dialogue easier to follow. The model is better at maintaining a distinct persona for a named character.</li>
+                 <li><strong>Add Rich Personal Details:</strong> Include hobbies, background, and personal characteristics in your agent descriptions (e.g., "Michael, a 40-year-old doctor who loves gardening and classical music"). Research shows this creates more believable, consistent agent behavior and improves multi-agent interactions significantly.</li>
+                 <li><strong>Be Specific & Contextual:</strong> The <code>prefix</code> should be a crystal-clear instruction. Use the <code>opening_statement</code> to provide universal context that all agents need, keeping them aligned.</li>
+             </ul>
+             
+             <h5><i class="fas fa-vial"></i> 4. Iterate and Refine</h5>
+             <p>The perfect configuration is rarely achieved on the first try. Treat it as a science experiment.</p>
+             <ul>
+                 <li><strong>Start Small:</strong> Begin with a simple two-agent flow to test your core idea.</li>
+                 <li><strong>Analyze the Transcript:</strong> After a run, read the conversation history. Where did it go wrong? Which agent got confused? What was misunderstood?</li>
+                 <li><strong>Tweak and Re-run:</strong> Adjust the prompts, agent order, or roles based on your observations and try again. The best results come from iterative improvement.</li>
+             </ul>
+         </div>
+</div>
+
+<script id="config-data" type="application/json">
+    {{- config | tojson | safe -}}
+</script>
+
+<script>
+    console.log("Initializing script...");
+    let configData = {};
+    let currentConversationName;
+    let currentAbortController = null;
+    let currentConversationId = null;
+    let isPaused = false;
+    
+    try {
+        const configJsonString = document.getElementById('config-data').textContent.trim();
+        console.log("Raw config string from <script> tag:", configJsonString);
+        if (configJsonString) {
+            configData = JSON.parse(configJsonString);
+            console.log("Configuration data loaded and parsed successfully:", JSON.parse(JSON.stringify(configData)));
+        } else {
+            console.log("Configuration data script tag is empty, initializing with empty object.");
+            configData = {};
+        }
+    } catch (e) {
+        console.error("FATAL: Failed to parse configuration data from server.", e);
+        alert("A critical error occurred while loading the page configuration. Please check the console for details.");
+        configData = {}; // Fallback
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM fully loaded and parsed.");
+        const convSelect = document.getElementById('conversation_name');
+        currentConversationName = convSelect.value;
+        console.log(`Initial conversation selected in dropdown: '${currentConversationName}'`);
+
+        if (currentConversationName) {
+            console.log("Calling renderEditor for the initial conversation.");
+            renderEditor(currentConversationName);
+        } else {
+            console.warn("No conversation was selected on page load.");
+            document.getElementById('config-editor').innerHTML = '<div class="glass-card"><p class="text-secondary text-center">No configuration loaded. Select a conversation to begin or create a new one.</p></div>';
+        }
+
+        const saveBtn = document.getElementById('save-config-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', saveConfiguration);
+        }
+    });
+
+    function renderEditor(convName) {
+        console.log(`%c--- Rendering editor for: ${convName} ---`, 'color: blue; font-weight: bold;');
+        const editor = document.getElementById('config-editor');
+        if (!convName || !configData[convName]) {
+            console.error(`renderEditor failed: No data found for conversation name '${convName}'.`);
+            editor.innerHTML = '<div class="glass-card"><p class="text-danger text-center"><i class="fas fa-exclamation-triangle"></i> Error: Could not find configuration for the selected conversation.</p></div>';
+            return;
+        }
+
+        const conversation = configData[convName];
+        console.log("Conversation object being rendered:", JSON.parse(JSON.stringify(conversation)));
+
+        let agentsHtml = (conversation.agents || []).map((agent, index) => {
+            console.log(`Building HTML for Agent ${index + 1}`, agent);
+            return `
+            <div class="agent-card" data-agent-index="${index}">
+                <div class="agent-card-header">
+                    <h5 class="mb-0">
+                        <span class="agent-number">${index + 1}</span>
+                        ${agent.agent_name || 'Unnamed Agent'}
+                    </h5>
+                    <button type="button" class="btn btn-sm btn-danger remove-agent-btn">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div class="agent-card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" title="The identity or persona of the AI agent">
+                                <i class="fas fa-id-badge"></i> Agent Name
+                            </label>
+                            <input type="text" class="form-control" value="${agent.agent_name || ''}" data-config-key="agent_name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" title="The language model to use for this agent">
+                                <i class="fas fa-brain"></i> Model
+                            </label>
+                            <select class="form-select model-select" data-config-key="model">
+                                <option value="" ${!agent.model ? 'selected' : ''}>Default (Gemini)</option>
+                                <option value="Gemini-2.5-pro" ${agent.model === 'Gemini-2.5-pro' ? 'selected' : ''}>Gemini-2.5-pro</option>
+                                <option value="Claude-Opus-4" ${agent.model === 'Claude-Opus-4' ? 'selected' : ''}>Claude-Opus-4</option>
+                                <option value="o3" ${agent.model === 'o3' ? 'selected' : ''}>o3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" title="A direct instruction defining the agent's primary role">
+                            <i class="fas fa-arrow-right"></i> Prefix
+                        </label>
+                        <textarea class="form-control" rows="2" data-config-key="prefix">${agent.prefix || ''}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" title="A reinforcing instruction for the agent">
+                            <i class="fas fa-crosshairs"></i> Context
+                        </label>
+                        <textarea class="form-control" rows="3" data-config-key="context">${agent.context || ''}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" title="A concluding statement attached to the agent's response">
+                            <i class="fas fa-signature"></i> Suffix
+                        </label>
+                        <textarea class="form-control" rows="2" data-config-key="suffix">${agent.suffix || ''}</textarea>
+                    </div>
+                </div>
+            </div>
+        `}).join('');
+        console.log("Generated HTML for all agents.");
+
+        const editorHtml = `
+            <div class="glass-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-sliders-h"></i> Conversation Configuration
+                </h3>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label" title="The unique name for this conversational flow">
+                            <i class="fas fa-tag"></i> Conversation Name
+                        </label>
+                        <input type="text" class="form-control" id="conversation-name-input" value="${convName}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" title="A global instruction or context-setter for the entire conversation">
+                        <i class="fas fa-quote-left"></i> Opening Statement
+                    </label>
+                    <textarea class="form-control" id="opening-statement-input" rows="3">${conversation.opening_statement || ''}</textarea>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-users"></i> Agent Configuration
+                </h3>
+                <div id="agents-container">${agentsHtml}</div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-success" id="add-agent-btn">
+                        <i class="fas fa-plus-circle"></i> Add Agent
+                    </button>
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-quote-right"></i> Closing Configuration
+                </h3>
+                <div class="mb-3">
+                    <label class="form-label" title="A final statement appended at the very end">
+                        <i class="fas fa-flag-checkered"></i> Closing Statement
+                    </label>
+                    <textarea class="form-control" id="closing-statement-input" rows="3">${conversation.closing_statement || ''}</textarea>
+                </div>
+            </div>
+        `;
+
+        editor.innerHTML = editorHtml;
+        console.log("Editor HTML has been set. Attaching event listeners now.");
+        attachEditorEventListeners();
+    }
+    
+    function attachEditorEventListeners() {
+        console.log("Attaching editor event listeners...");
+        const addAgentBtn = document.getElementById('add-agent-btn');
+        if (addAgentBtn) {
+            addAgentBtn.addEventListener('click', () => {
+                console.log(`'Add Agent' button clicked for conversation: '${currentConversationName}'`);
+                if (!configData[currentConversationName].agents) {
+                    console.log("Agent array did not exist, creating it.");
+                    configData[currentConversationName].agents = [];
+                }
+                const newAgent = {
+                    agent_name: "New Agent",
+                    prefix: "",
+                    context: "",
+                    suffix: "",
+                    model: ""
+                };
+                configData[currentConversationName].agents.push(newAgent);
+                console.log("New agent added to config data. Rerendering editor.", configData[currentConversationName]);
+                renderEditor(currentConversationName);
+            });
+        } else {
+            console.error("Could not find 'Add Agent' button to attach listener.");
+        }
+
+        document.querySelectorAll('.remove-agent-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const agentCard = e.target.closest('.agent-card[data-agent-index]');
+                const index = parseInt(agentCard.dataset.agentIndex, 10);
+                console.log(`'Remove Agent' button clicked for agent at index: ${index}`);
+                if (configData[currentConversationName] && configData[currentConversationName].agents) {
+                    configData[currentConversationName].agents.splice(index, 1);
+                    console.log(`Agent at index ${index} removed. Rerendering editor.`);
+                    renderEditor(currentConversationName);
+                } else {
+                    console.error("Could not remove agent - config structure is unexpected.");
+                }
+            });
+        });
+        console.log("Finished attaching listeners for add/remove buttons.");
+    }
+
+    function saveConfiguration() {
+        console.log("%c--- Saving configuration ---", "color: #28a745; font-weight: bold;");
+        const finalConfig = updateAndGetFinalConfig();
+        
+        const saveBtn = document.getElementById('save-config-btn');
+        const originalText = saveBtn.textContent;
+        saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        saveBtn.disabled = true;
+
+        fetch('/save_config', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalConfig, null, 2),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || 'An unknown error occurred.') });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Save response:', data);
+            saveBtn.textContent = 'Saved!';
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            }, 2000);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred while saving: ' + error.message);
+            saveBtn.textContent = originalText;
+            saveBtn.disabled = false;
+        });
+    }
+
+    function updateAndGetFinalConfig() {
+        console.log("%c--- Updating and finalizing config for submission ---", "color: green; font-weight: bold;");
+        
+        const nameInput = document.getElementById('conversation-name-input');
+        const newConvName = nameInput ? nameInput.value : currentConversationName;
+        console.log(`Current conversation name in editor is: '${newConvName}'`);
+
+        const newConversationData = {
+            opening_statement: document.getElementById('opening-statement-input').value,
+            closing_statement: document.getElementById('closing-statement-input').value,
+            agents: []
+        };
+        console.log("Built base conversation data from opening/closing statements:", newConversationData);
+
+        document.querySelectorAll('#agents-container .agent-card[data-agent-index]').forEach((agentCard, index) => {
+            console.log(`Processing data for agent card at index ${index}`);
+            const agent = {};
+            agentCard.querySelectorAll('[data-config-key]').forEach(input => {
+                const key = input.dataset.configKey;
+                agent[key] = input.value;
+            });
+            newConversationData.agents.push(agent);
+            console.log(`Agent ${index} data collected:`, agent);
+        });
+
+        if (newConvName !== currentConversationName) {
+            console.warn(`Conversation name changed from '${currentConversationName}' to '${newConvName}'. The old entry will be deleted.`);
+            const oldName = currentConversationName;
+            // Create new entry before deleting old one
+            configData[newConvName] = newConversationData;
+            delete configData[oldName];
+            currentConversationName = newConvName;
+             // Update dropdown to reflect name change
+            updateDropdown();
+        } else {
+            console.log(`Updating data for existing conversation: '${currentConversationName}'`);
+            configData[currentConversationName] = newConversationData;
+        }
+
+        console.log("Final config object after update:", JSON.parse(JSON.stringify(configData)));
+        return configData;
+    }
+    
+    function updateDropdown() {
+        console.log("Updating dropdown with latest conversation names.");
+        const select = document.getElementById('conversation_name');
+        const newListOfNames = Object.keys(configData);
+        
+        console.log("New list of names:", newListOfNames);
+        console.log(`Previously selected name was: '${currentConversationName}'`);
+        
+        // Re-create options, preserving selection if possible
+        select.innerHTML = '';
+        newListOfNames.forEach(name => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+        select.value = currentConversationName;
+        console.log(`Dropdown updated. Current value is set to: '${select.value}'`);
+    }
+
+    function resetRunButton() {
+        const runBtn = document.getElementById('run-conversation-btn');
+        const stopBtn = document.getElementById('stop-conversation-btn');
+        const pauseBtn = document.getElementById('pause-conversation-btn');
+        runBtn.disabled = false;
+        runBtn.innerHTML = '<i class="fas fa-rocket"></i> Run Conversation';
+        stopBtn.style.display = 'none';
+        pauseBtn.style.display = 'none';
+        currentAbortController = null;
+        currentConversationId = null;
+        isPaused = false;
+    }
+
+    function showDeveloperCreditIfFinalResponse() {
+        const finalResponseBox = document.getElementById('final-response-box');
+        const developerCreditSection = document.getElementById('developer-credit-section');
+        
+        // Check if final response has meaningful content (not empty, not just "Thinking...")
+        if (finalResponseBox && developerCreditSection && finalResponseBox.innerHTML.trim()) {
+            const responseText = finalResponseBox.textContent || finalResponseBox.innerText || '';
+            if (responseText.trim() && responseText.trim() !== 'Thinking...') {
+                console.log("Final response populated, showing developer credit");
+                developerCreditSection.style.display = 'block';
+            }
+        }
+    }
+
+    function hideDeveloperCredit() {
+        const developerCreditSection = document.getElementById('developer-credit-section');
+        if (developerCreditSection) {
+            developerCreditSection.style.display = 'none';
+        }
+    }
+
+    // Add event listener for pause button
+    document.getElementById('pause-conversation-btn').addEventListener('click', () => {
+        if (!currentConversationId) {
+            console.error("Cannot pause/resume, no conversation ID.");
+            return;
+        }
+        
+        const pauseBtn = document.getElementById('pause-conversation-btn');
+        const url = isPaused ? `/resume_conversation/${currentConversationId}` : `/pause_conversation/${currentConversationId}`;
+
+        fetch(url, { method: 'POST' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    if (isPaused) {
+                        // We just resumed
+                        isPaused = false;
+                        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                        pauseBtn.classList.remove('btn-success');
+                        pauseBtn.classList.add('btn-warning');
+                    } else {
+                        // We just paused
+                        isPaused = true;
+                        pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+                        pauseBtn.classList.remove('btn-warning');
+                        pauseBtn.classList.add('btn-success');
+                    }
+                } else {
+                    console.error("Failed to toggle pause state:", data.message);
+                    alert("Error: " + data.message);
+                }
+            }).catch(err => {
+                console.error("Error calling pause/resume endpoint:", err);
+                alert("An error occurred trying to pause/resume.");
+            });
+    });
+
+    document.getElementById('main-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log("%c--- Form submission triggered for streaming ---", "color: orange; font-weight: bold;");
+
+        const runBtn = document.getElementById('run-conversation-btn');
+        const stopBtn = document.getElementById('stop-conversation-btn');
+        const pauseBtn = document.getElementById('pause-conversation-btn');
+        runBtn.disabled = true;
+        runBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Running...
+        `;
+        stopBtn.style.display = 'inline-block';
+        pauseBtn.style.display = 'inline-block';
+
+        // Show and clear result containers
+        const resultContainer = document.getElementById('result-container');
+        const finalResponseBox = document.getElementById('final-response-box');
+        const historyResponseBox = document.getElementById('history-response-box');
+        resultContainer.style.display = 'block';
+        finalResponseBox.innerHTML = '';
+        historyResponseBox.innerHTML = '<div class="formatted-response">Initializing conversation...</div>';
+        
+        // Hide developer credit at start of conversation
+        hideDeveloperCredit();
+
+        const finalConfig = updateAndGetFinalConfig();
+        const prompt = document.getElementById('prompt').value;
+
+        const payload = {
+            prompt: prompt,
+            conversation_name: currentConversationName,
+            config: finalConfig,
+            api_keys: {
+                gemini: document.getElementById('gemini-api-key').value,
+                openai: document.getElementById('openai-api-key').value,
+                anthropic: document.getElementById('anthropic-api-key').value
+            }
+        };
+        console.log("Payload for streaming:", payload);
+
+        // Create new AbortController for this request
+        currentAbortController = new AbortController();
+
+        fetch('/stream_conversation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+            signal: currentAbortController.signal
+        }).then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            function read() {
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        console.log("Stream complete");
+                        resetRunButton();
+                        return;
+                    }
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const events = chunk.split('\n\n');
+                    
+                    for (const eventStr of events) {
+                        if (eventStr.trim() === '') continue;
+                        if (!eventStr.startsWith('data:')) continue;
+
+                        const jsonStr = eventStr.substring(5);
+                        try {
+                            const data = JSON.parse(jsonStr);
+                            if (data.type === 'system' && data.conversation_id) {
+                                currentConversationId = data.conversation_id;
+                                console.log(`Received conversation ID: ${currentConversationId}`);
+                            } else if (data.type === 'history_update') {
+                                // Format the conversation history
+                                historyResponseBox.innerHTML = formatConversationText(data.history);
+                                // Format the final response
+                                finalResponseBox.innerHTML = formatContent(data.final_response);
+                                // Show developer credit if final response has content
+                                showDeveloperCreditIfFinalResponse();
+                            } else if (data.type === 'final_response_update') {
+                                finalResponseBox.innerHTML = formatContent(data.final_response);
+                                // Show developer credit if final response has content
+                                showDeveloperCreditIfFinalResponse();
+                            } else if (data.type === 'error') {
+                                console.error("SSE Error:", data.message);
+                                historyResponseBox.innerHTML += `<div class="warning-box"><strong>ERROR:</strong> ${escapeHtml(data.message)}</div>`;
+                                resetRunButton();
+                            } else if (data.type === 'done') {
+                                console.log("SSE stream finished.");
+                                resetRunButton();
+                            } else if (data.type === 'heartbeat') {
+                                console.log("Received pause heartbeat from server...");
+                            }
+                        } catch (e) {
+                            console.error("Error parsing SSE event:", e, "Raw event:", eventStr);
+                        }
+                    }
+
+                    read();
+                }).catch(error => {
+                    if (error.name === 'AbortError') {
+                        console.log("Stream aborted by user");
+                        historyResponseBox.innerHTML += '<div class="warning-box"><strong>STOPPED:</strong> Conversation stopped by user.</div>';
+                    } else {
+                        console.error("Stream read error:", error);
+                        historyResponseBox.innerHTML += '<div class="warning-box"><strong>ERROR:</strong> Failed to read stream.</div>';
+                    }
+                    resetRunButton();
+                });
+            }
+            read();
+        }).catch(err => {
+            if (err.name === 'AbortError') {
+                console.log("Fetch aborted by user");
+                historyResponseBox.innerHTML += '<div class="warning-box"><strong>STOPPED:</strong> Conversation stopped by user.</div>';
+            } else {
+                console.error("Fetch stream failed:", err);
+                historyResponseBox.innerHTML += '<div class="warning-box"><strong>FATAL ERROR:</strong> Could not connect to the server.</div>';
+            }
+            resetRunButton();
+        });
+    });
+
+    document.getElementById('conversation_name').addEventListener('change', (e) => {
+        const oldName = currentConversationName;
+        currentConversationName = e.target.value;
+        console.log(`%c--- Switched selected conversation from '${oldName}' to '${currentConversationName}' ---`, "color: purple; font-weight: bold;");
+        renderEditor(currentConversationName);
+    });
+
+    // Add event listener for stop button
+    document.getElementById('stop-conversation-btn').addEventListener('click', () => {
+        console.log("Stop button clicked, aborting conversation...");
+        if (currentAbortController) {
+            currentAbortController.abort();
+        }
+    });
+
+    // Conversation formatting functions
+    function formatConversationText(text) {
+        console.log("Formatting conversation text...");
+        
+        // Handle empty text
+        if (!text) return '<div class="formatted-response">No content to display.</div>';
+        
+        const formatted = document.createElement('div');
+        formatted.className = 'formatted-response';
+        
+        // Split by agent separators (look for variations)
+        const agentSeparators = /\n-{10,}\n|\n={10,}\n|\n\*{3,}\n/g;
+        const sections = text.split(agentSeparators);
+        
+        sections.forEach((section, index) => {
+            if (section.trim()) {
+                const agentCard = formatAgentSection(section, index);
+                if (agentCard) {
+                    formatted.appendChild(agentCard);
+                }
+            }
+        });
+        
+        return formatted.outerHTML;
+    }
+
+    function formatAgentSection(text, index) {
+        const block = document.createElement('div');
+        block.className = 'agent-response-block';
+        
+        // Try to parse agent header
+        const lines = text.trim().split('\n');
+        let agentName = '';
+        let agentDescription = '';
+        let contentStart = 0;
+        
+        const firstLine = lines[0];
+        
+        // Handle initial user prompt block separately
+        if (firstLine.startsWith('USER PROMPT:')) {
+            block.innerHTML = formatContent(text);
+            return block;
+        }
+
+        // Look for "Name - Description" pattern, which is how we format it in Python
+        const agentPattern = /^(.+?)(?:\s+-\s+(.+))?$/;
+        let match = firstLine.match(agentPattern);
+
+        if (match) {
+            agentName = match[1].trim();
+            agentDescription = (match[2] || '').trim();
+            contentStart = 1;
+        } else {
+            // Fallback for unexpected formats
+            agentName = firstLine;
+            contentStart = 1;
+        }
+        
+        // Remove suffix line if present
+        if (lines[lines.length - 1].startsWith("This was") && lines[lines.length - 1].endsWith("'s response")) {
+            lines.pop();
+        }
+
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'agent-response-header';
+        header.innerHTML = `
+            <i class="fas fa-user-circle persona-icon"></i>
+            <div class="agent-header-text">
+                <div class="agent-response-name">${escapeHtml(agentName)}</div>
+                ${agentDescription ? `<div class="agent-response-description">${escapeHtml(agentDescription)}</div>` : ''}
+            </div>
+        `;
+        block.appendChild(header);
+        
+        // Create body
+        const body = document.createElement('div');
+        body.className = 'agent-response-body';
+        
+        // Process content
+        const content = lines.slice(contentStart).join('\n');
+        body.innerHTML = formatContent(content);
+        
+        block.appendChild(body);
+        
+        return block;
+    }
+
+    function formatContent(text) {
+        // Special handling for the "Thinking..." message to add an animation
+        if (text.trim() === 'Thinking...') {
+            return `<span class="thinking-indicator">Thinking</span>`;
+        }
+
+        let formatted = text;
+        
+        // Escape HTML first
+        formatted = escapeHtml(formatted);
+        
+        // Format code blocks (```...```)
+        formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, function(match, lang, code) {
+            return `<div class="formatted-code-block"><code>${code.trim()}</code></div>`;
+        });
+        
+        // Format dialogue lines (**Speaker:** "Quote")
+        formatted = formatted.replace(/\*\*([^:]+):\*\*\s*[""]([^""]+)[""]/g, function(match, speaker, text) {
+            return `<div class="dialogue-line">
+                <div class="dialogue-speaker">${speaker}:</div>
+                <div class="dialogue-text">${text}</div>
+            </div>`;
+        });
+        
+        // Format bold text
+        formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        
+        // Format inline code (backticks)
+        formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+        
+        // Format numbered lists
+        formatted = formatted.replace(/^(\d+)\.\s+(.+)$/gm, function(match, num, text) {
+            return `<li value="${num}">${text}</li>`;
+        });
+        
+        // Wrap consecutive li elements in ol
+        formatted = formatted.replace(/(<li[^>]*>[\s\S]*?<\/li>\s*)+/g, function(match) {
+            return `<ol>${match}</ol>`;
+        });
+        
+        // Format section separators (*** or ---)
+        formatted = formatted.replace(/^[\*\-]{3,}$/gm, '<div class="conversation-separator"></div>');
+        
+        // Format file paths and commands
+        formatted = formatted.replace(/["']([A-Za-z]:\\[^"']+)['"]/g, '<code>$1</code>');
+        
+        // Format USER PROMPT
+        formatted = formatted.replace(/^USER PROMPT:\s*(.+)$/m, function(match, prompt) {
+            return `<div class="initial-prompt-box">
+                <div class="initial-prompt-label">USER PROMPT:</div>
+                <div>${prompt}</div>
+            </div>`;
+        });
+        
+        // Format warnings (look for keywords like "warning", "caution", "note")
+        formatted = formatted.replace(/^(Warning|Caution|Note):\s*(.+)$/gmi, function(match, type, text) {
+            const boxClass = type.toLowerCase() === 'warning' || type.toLowerCase() === 'caution' ? 'warning-box' : 'info-box';
+            return `<div class="${boxClass}"><strong>${type}:</strong> ${text}</div>`;
+        });
+        
+        // Convert newlines to <br> for better formatting
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        return formatted;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html> 

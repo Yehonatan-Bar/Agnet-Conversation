@@ -1,0 +1,56 @@
+{
+    "test_session": {
+        "opening_statement": "opening_statement - This is a test session, in it the responses will be two words: 'Model response' ",
+        "closing_statement": "closing_statement - Testing session complete. All test results and findings have been documented.",
+        "agents": [
+            {
+                "agent_name": "Michael 1",
+                "model": "",
+                "prefix": "prefix - As Test Planner num 1",
+                "context": "context - Test Planner num 1",
+                "suffix": "suffix - Test Planner num 1"
+            },
+            {
+                "agent_name": "Sarah 2",
+                "model": "o3",
+                "prefix": "prefix - As Test Executor num 2",
+                "context": "context - Test Executor num 2",
+                "suffix": "suffix - Test Executor num 2"
+            },
+            {
+                "agent_name": "David 3",
+                "model": "Claude-Opus-4",
+                "prefix": "prefix - As Test Executor num 3",
+                "context": "context - Test Executor num 3",
+                "suffix": "suffix - Test Executor num 3"
+            }
+        ]
+    },
+    "test_session_2": {
+        "agents": [
+            {
+                "agent_name": "Michael, 40-year-old doctor who loves gardening",
+                "context": "As a software engineer, you will now focus on the user's request and help them with their request",
+                "model": "",
+                "prefix": "A software engineer, who's goal is to help the user with their request:",
+                "suffix": "This was Michael's response"
+            },
+            {
+                "agent_name": "Sarah, 35-year-old UX designer who practices yoga",
+                "context": "As a UX designer, you will focus on the user experience aspects of the request and provide insights on usability and design",
+                "model": "Claude-Opus-4",
+                "prefix": "A user experience designer, who's goal is to ensure the solution is user-friendly and accessible:",
+                "suffix": "This was Sarah's response"
+            },
+            {
+                "agent_name": "David, 45-year-old project manager who enjoys hiking",
+                "context": "As a project manager, you will consider the feasibility, timeline, and resource requirements for implementing the user's request",
+                "model": "Gemini-2.5-pro",
+                "prefix": "A project manager, who's goal is to ensure the solution is practical and deliverable:",
+                "suffix": "This was David's response"
+            }
+        ],
+        "closing_statement": "closing_statement - Testing session complete. All test results and findings have been documented.",
+        "opening_statement": "You are all participating in a conversation about the best way to respond to the user's request. The attendees are: Michael, Sarah and David. "
+    }
+}
