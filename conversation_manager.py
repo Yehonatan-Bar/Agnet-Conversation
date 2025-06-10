@@ -8,6 +8,7 @@ import importlib.util
 import google.generativeai as genai
 from openai import OpenAI
 import anthropic
+import httpx
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
 import uuid
 import time
@@ -65,21 +66,11 @@ def send_to_openai(prompt: str, api_key: str) -> str:
     if not api_key or "PLACEHOLDER" in api_key:
         return "Error: OpenAI API key is not configured. Please provide it in the UI or set the OPENAI_API_KEY environment variable."
     try:
-        # Clear proxy environment variables to avoid client initialization issues
-        import os
-        old_http_proxy = os.environ.pop('HTTP_PROXY', None)
-        old_https_proxy = os.environ.pop('HTTPS_PROXY', None)
-        old_http_proxy_lower = os.environ.pop('http_proxy', None)
-        old_https_proxy_lower = os.environ.pop('https_proxy', None)
-        
-        try:
-            client = OpenAI(api_key=api_key)
-        finally:
-            # Restore proxy settings
-            if old_http_proxy: os.environ['HTTP_PROXY'] = old_http_proxy
-            if old_https_proxy: os.environ['HTTPS_PROXY'] = old_https_proxy
-            if old_http_proxy_lower: os.environ['http_proxy'] = old_http_proxy_lower
-            if old_https_proxy_lower: os.environ['https_proxy'] = old_https_proxy_lower
+        # Explicitly initialize an httpx client with no proxies.
+        # This prevents the client from picking up proxy settings from the environment,
+        # which can cause issues in certain deployment environments like Render.
+        http_client = httpx.Client(proxies={})
+        client = OpenAI(api_key=api_key, http_client=http_client)
         response = client.responses.create(
             model="o3-2025-04-16",
             input=[
@@ -120,21 +111,11 @@ def send_to_claude(prompt: str, model_name: str, api_key: str) -> str:
     if not api_key or "PLACEHOLDER" in api_key:
         return "Error: Anthropic API key is not configured. Please provide it in the UI or set the ANTHROPIC_API_KEY environment variable."
     try:
-        # Clear proxy environment variables to avoid client initialization issues
-        import os
-        old_http_proxy = os.environ.pop('HTTP_PROXY', None)
-        old_https_proxy = os.environ.pop('HTTPS_PROXY', None)
-        old_http_proxy_lower = os.environ.pop('http_proxy', None)
-        old_https_proxy_lower = os.environ.pop('https_proxy', None)
-        
-        try:
-            client = anthropic.Anthropic(api_key=api_key)
-        finally:
-            # Restore proxy settings
-            if old_http_proxy: os.environ['HTTP_PROXY'] = old_http_proxy
-            if old_https_proxy: os.environ['HTTPS_PROXY'] = old_https_proxy
-            if old_http_proxy_lower: os.environ['http_proxy'] = old_http_proxy_lower
-            if old_https_proxy_lower: os.environ['https_proxy'] = old_https_proxy_lower
+        # Explicitly initialize an httpx client with no proxies.
+        # This prevents the client from picking up proxy settings from the environment,
+        # which can cause issues in certain deployment environments like Render.
+        http_client = httpx.Client(proxies={})
+        client = anthropic.Anthropic(api_key=api_key, http_client=http_client)
         
         # Map friendly names to actual model identifiers
         model_to_use = "claude-opus-4-20250514" # Default
