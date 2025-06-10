@@ -71,28 +71,17 @@ def send_to_openai(prompt: str, api_key: str) -> str:
         # which can cause issues in certain deployment environments like Render.
         http_client = httpx.Client(proxies={})
         client = OpenAI(api_key=api_key, http_client=http_client)
-        response = client.responses.create(
+        response = client.chat.completions.create(
             model="o3-2025-04-16",
-            input=[
+            messages=[
                 {
                     "role": "user",
-                    "content": [
-                        {
-                            "type": "input_text",
-                            "text": prompt
-                        }
-                    ]
+                    "content": prompt
                 }
             ]
         )
         
-        # Extract text from the response output
-        for out_item in response.output:
-            if hasattr(out_item, "content"):
-                for element in out_item.content:
-                    if hasattr(element, "text"):
-                        return element.text
-        return ""
+        return response.choices[0].message.content or ""
     except Exception as e:
         return f"Error with OpenAI API: {str(e)}"
 
