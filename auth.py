@@ -50,7 +50,7 @@ def login():
 @auth_bp.route('/auth/google/callback')
 def authorize():
     token = oauth.google.authorize_access_token()
-    user_info = oauth.google.parse_id_token(token)
+    user_info = token['userinfo']
     
     # Create a user object
     user = User(
