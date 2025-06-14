@@ -8,21 +8,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&family=Courier+Prime:wght@400;700&display=swap');
+        
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --dark-bg: #0a0e27;
-            --card-bg: rgba(16, 20, 39, 0.8);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #e4e4e7;
-            --text-secondary: #a1a1aa;
-            --neon-purple: #a855f7;
-            --neon-blue: #3b82f6;
-            --neon-pink: #ec4899;
-            --success-green: #10b981;
-            --danger-red: #ef4444;
+            --primary-gradient: linear-gradient(135deg, #8B6B47 0%, #A0826D 100%);
+            --secondary-gradient: linear-gradient(135deg, #D4A574 0%, #B08D57 100%);
+            --accent-gradient: linear-gradient(135deg, #C19A6B 0%, #A67C52 100%);
+            --warm-bg: #F5E6D3;
+            --card-bg: #FAF3E9;
+            --paper-bg: #FFF8F0;
+            --border-color: #D4A574;
+            --text-primary: #3A2317;
+            --text-secondary: #6B4E3D;
+            --accent-gold: #B08D57;
+            --accent-bronze: #8B6B47;
+            --accent-copper: #A67C52;
+            --success-green: #4A6741;
+            --danger-red: #8B3A3A;
+            --vintage-blue: #4A5D6B;
+            --vintage-purple: #6B4A5D;
         }
 
         * {
@@ -30,16 +34,18 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
+            font-family: 'Crimson Text', serif;
+            background: var(--warm-bg);
             color: var(--text-primary);
             min-height: 100vh;
             margin: 0;
             position: relative;
             overflow-x: hidden;
+            font-size: 17px;
+            line-height: 1.7;
         }
 
-        /* Static background */
+        /* Vintage paper texture background */
         body::before {
             content: '';
             position: fixed;
@@ -48,9 +54,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%);
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E"),
+                radial-gradient(ellipse at top, rgba(212, 165, 116, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom, rgba(160, 130, 109, 0.1) 0%, transparent 60%);
             z-index: -1;
         }
 
@@ -59,108 +65,162 @@
             padding: 2rem;
         }
 
-        /* Glassmorphism cards */
+        /* Vintage paper cards */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2.5rem;
             margin-bottom: 2rem;
             box-shadow: 
-                0 8px 32px 0 rgba(31, 38, 135, 0.37),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                0 4px 6px rgba(139, 107, 71, 0.1),
+                0 1px 3px rgba(139, 107, 71, 0.08);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Vintage corner ornaments */
+        .glass-card::before {
+            content: '❦';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
+        }
+
+        .glass-card::after {
+            content: '❦';
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
+            transform: rotate(180deg);
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
             box-shadow: 
-                0 12px 40px 0 rgba(31, 38, 135, 0.5),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+                0 6px 12px rgba(139, 107, 71, 0.15),
+                0 3px 6px rgba(139, 107, 71, 0.1);
         }
 
         /* Headers */
         h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Raleway', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--accent-bronze);
             text-align: center;
             margin-bottom: 1rem;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--accent-gradient);
         }
 
         .subtitle {
+            font-family: 'Crimson Text', serif;
             text-align: center;
             color: var(--text-secondary);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 3rem;
-            font-weight: 300;
+            font-weight: 400;
+            font-style: italic;
         }
 
         h2, h3, h4, h5 {
+            font-family: 'Raleway', sans-serif;
             color: var(--text-primary);
             font-weight: 600;
+            margin-top: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--accent-bronze);
         }
 
         /* Form controls */
         .form-control, .form-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--paper-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-primary);
-            border-radius: 12px;
+            border-radius: 4px;
             padding: 0.75rem 1rem;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            font-family: 'Crimson Text', serif;
             transition: all 0.3s ease;
+            box-shadow: inset 0 1px 2px rgba(139, 107, 71, 0.1);
         }
 
         .form-control:focus, .form-select:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+            background: white;
+            border-color: var(--accent-bronze);
+            box-shadow: 0 0 0 2px rgba(139, 107, 71, 0.1);
             color: var(--text-primary);
             outline: none;
         }
 
-        /* Custom dropdown styling with better browser support */
+        /* Custom dropdown styling with vintage theme */
         .form-select {
-            background-color: rgba(255, 255, 255, 0.05) !important;
+            background-color: var(--paper-bg) !important;
             color: var(--text-primary) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238B6B47' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.8rem;
+            padding-right: 2.5rem;
         }
 
         .form-select:focus {
-            background-color: rgba(255, 255, 255, 0.08) !important;
+            background-color: white !important;
             color: var(--text-primary) !important;
-            border-color: var(--neon-purple) !important;
+            border-color: var(--accent-bronze) !important;
         }
 
-        /* Style dropdown options - comprehensive approach */
+        /* Style dropdown options */
         .form-select option {
-            background-color: var(--dark-bg) !important;
-            background: var(--dark-bg) !important;
+            background-color: var(--paper-bg) !important;
+            background: var(--paper-bg) !important;
             color: var(--text-primary) !important;
             padding: 12px 16px !important;
             border: none !important;
         }
 
         .form-select option:hover {
-            background-color: rgba(168, 85, 247, 0.8) !important;
-            background: rgba(168, 85, 247, 0.8) !important;
+            background-color: var(--accent-gold) !important;
+            background: var(--accent-gold) !important;
             color: white !important;
         }
 
         .form-select option:checked,
         .form-select option:selected {
-            background-color: var(--neon-purple) !important;
-            background: var(--neon-purple) !important;
+            background-color: var(--accent-bronze) !important;
+            background: var(--accent-bronze) !important;
             color: white !important;
         }
 
@@ -170,67 +230,99 @@
         }
 
         .form-select::-webkit-scrollbar-track {
-            background: var(--dark-bg);
+            background: var(--paper-bg);
         }
 
         .form-select::-webkit-scrollbar-thumb {
-            background: var(--neon-purple);
+            background: var(--accent-bronze);
             border-radius: 4px;
         }
 
-        /* Force dark theme on select dropdown */
+        /* Light theme on select dropdown */
         .form-select {
-            color-scheme: dark;
+            color-scheme: light;
         }
 
         .form-label {
             color: var(--text-secondary);
-            font-weight: 500;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+        }
+
+        /* Ensure text is readable in modals */
+        .modal-body {
+            color: var(--text-primary);
+        }
+
+        .modal-body .form-text {
+            color: var(--text-secondary) !important;
+        }
+
+        .modal-body p {
+            color: var(--text-primary);
+        }
+
+        .text-danger {
+            color: var(--danger-red) !important;
         }
 
         /* Buttons */
         .btn {
-            border-radius: 12px;
+            font-family: 'Raleway', sans-serif;
+            border-radius: 4px;
             padding: 0.75rem 1.5rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
-            border: none;
+            border: 2px solid transparent;
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(139, 107, 71, 0.15);
         }
 
         .btn-primary {
-            background: var(--primary-gradient);
+            background: var(--accent-bronze);
             color: white;
-            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+            border-color: var(--accent-bronze);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(139, 107, 71, 0.2);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--success-green);
             color: white;
-            box-shadow: 0 4px 15px 0 rgba(16, 185, 129, 0.4);
+            border-color: var(--success-green);
         }
 
         .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.6);
+            background: #5A7951;
+            border-color: #5A7951;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(74, 103, 65, 0.2);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: var(--danger-red);
             color: white;
+            border-color: var(--danger-red);
+        }
+
+        .btn-danger:hover {
+            background: #A04444;
+            border-color: #A04444;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(139, 58, 58, 0.2);
         }
 
         .btn-outline-success {
@@ -243,28 +335,52 @@
             background: var(--success-green);
             color: white;
             border-color: var(--success-green);
-            box-shadow: 0 4px 15px 0 rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 8px rgba(74, 103, 65, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-secondary);
+            color: white;
+            border-color: var(--text-secondary);
+        }
+
+        .btn-warning {
+            background: var(--accent-gold);
+            color: white;
+            border-color: var(--accent-gold);
+        }
+
+        .btn-warning:hover {
+            background: var(--accent-copper);
+            border-color: var(--accent-copper);
         }
 
         /* Agent cards */
         .agent-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: var(--paper-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             margin-bottom: 1.5rem;
             overflow: hidden;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(139, 107, 71, 0.1);
         }
 
         .agent-card:hover {
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            border-color: var(--accent-bronze);
+            box-shadow: 0 4px 8px rgba(139, 107, 71, 0.15);
         }
 
         .agent-card-header {
-            background: rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(176, 141, 87, 0.15) 100%);
             padding: 1.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -280,28 +396,31 @@
             justify-content: center;
             width: 32px;
             height: 32px;
-            background: var(--accent-gradient);
+            background: var(--accent-bronze);
             border-radius: 50%;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             margin-right: 0.75rem;
             color: white;
+            font-family: 'Raleway', sans-serif;
+            box-shadow: 0 2px 4px rgba(139, 107, 71, 0.2);
         }
 
         /* Response boxes */
         .response-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 1.5rem;
+            background: var(--paper-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 2rem;
             margin-top: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            line-height: 1.8;
             white-space: pre-wrap;
             color: var(--text-primary);
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(139, 107, 71, 0.1);
         }
 
         .response-box::before {
@@ -310,26 +429,28 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 2px;
             background: var(--accent-gradient);
         }
 
         /* Dev note */
         .dev-note {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: #fbbf24;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(176, 141, 87, 0.15) 100%);
+            border: 1px solid var(--accent-gold);
+            color: var(--text-primary);
             padding: 1rem 1.5rem;
-            border-radius: 12px;
+            border-radius: 6px;
             margin-bottom: 2rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 1rem;
+            box-shadow: 0 2px 4px rgba(176, 141, 87, 0.15);
         }
 
         .dev-note i {
             font-size: 1.2rem;
+            color: var(--accent-bronze);
         }
 
         /* Tooltips */
@@ -347,35 +468,36 @@
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 12px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 5px;
+            background: var(--warm-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
+            background: var(--accent-bronze);
+            border-radius: 6px;
+            border: 1px solid var(--accent-gold);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--accent-gold);
         }
 
         /* Developer Credit Section */
         .developer-credit {
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(176, 141, 87, 0.1) 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 2.5rem;
             margin-bottom: 3rem;
             text-align: center;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 8px rgba(139, 107, 71, 0.1);
         }
 
         .developer-credit::before {
@@ -384,8 +506,20 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--primary-gradient);
+            height: 2px;
+            background: var(--accent-gradient);
+        }
+
+        /* Decorative corners for developer credit */
+        .developer-credit::after {
+            content: '§';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
+            font-family: 'Crimson Text', serif;
         }
 
         .developer-credit-content {
@@ -394,12 +528,15 @@
         }
 
         .developer-name {
-            color: var(--neon-purple);
-            font-weight: 600;
-            font-size: 1.4rem;
+            color: var(--accent-bronze);
+            font-weight: 700;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
             direction: rtl;
             text-align: center;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .developer-message,
@@ -407,10 +544,11 @@
         .developer-opportunity {
             color: var(--text-primary);
             margin-bottom: 0.75rem;
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.8;
             direction: rtl;
             text-align: center;
+            font-family: 'Crimson Text', serif;
         }
 
         .developer-opportunity {
@@ -421,23 +559,29 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+            background: var(--vintage-blue);
             color: white;
             padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0px 8px 15px rgba(0, 119, 181, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0px 3px 6px rgba(74, 93, 107, 0.3);
             direction: rtl;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 2px solid var(--vintage-blue);
         }
 
         .linkedin-link:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0px 12px 25px rgba(0, 119, 181, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0px 5px 10px rgba(74, 93, 107, 0.4);
             color: white;
             text-decoration: none;
+            background: #5A6D7B;
+            border-color: #5A6D7B;
         }
 
         .linkedin-link i {
@@ -446,9 +590,22 @@
 
         /* Section dividers */
         .section-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
             margin: 3rem 0;
+            position: relative;
+        }
+
+        .section-divider::after {
+            content: '◈';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--warm-bg);
+            padding: 0 1rem;
+            color: var(--accent-gold);
+            font-size: 1.2rem;
         }
 
         .guide-link-banner {
@@ -457,67 +614,89 @@
         }
 
         .guide-link-banner a {
-            background: var(--secondary-gradient);
+            background: var(--accent-gold);
             color: white;
             padding: 12px 24px;
-            border-radius: 50px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
             display: inline-block;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0px 10px 20px rgba(245, 87, 108, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(176, 141, 87, 0.3);
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 2px solid var(--accent-gold);
         }
 
         .guide-link-banner a:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0px 15px 30px rgba(245, 87, 108, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 12px rgba(176, 141, 87, 0.4);
             color: white;
+            background: var(--accent-copper);
+            border-color: var(--accent-copper);
         }
 
         /* Guide section */
         .guide-section {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
             padding: 3rem;
             margin-top: 4rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 8px rgba(139, 107, 71, 0.1);
+            position: relative;
+        }
+
+        .guide-section::before {
+            content: '※';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
         }
 
         .guide-section h4 {
-            color: var(--neon-blue);
+            color: var(--accent-bronze);
             margin-top: 2rem;
             margin-bottom: 1rem;
+            font-size: 1.4rem;
         }
 
         .guide-section h5 {
-            color: var(--neon-purple);
+            color: var(--vintage-purple);
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
+            font-size: 1.2rem;
         }
 
         .guide-section h6 {
-            color: var(--neon-pink);
+            color: var(--accent-copper);
             margin-top: 1.25rem;
             margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
 
         .guide-section code {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(139, 107, 71, 0.1);
             padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9em;
-            color: var(--neon-blue);
+            border-radius: 3px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.95em;
+            color: var(--accent-bronze);
         }
 
         .guide-section pre {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            background: var(--paper-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             padding: 1.5rem;
             overflow-x: auto;
             margin: 1rem 0;
+            box-shadow: inset 0 1px 3px rgba(139, 107, 71, 0.1);
         }
 
         .guide-section pre code {
@@ -526,33 +705,24 @@
             color: var(--text-primary);
         }
 
-        /* Model select special styling */
-        .model-select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a855f7' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1rem;
-            padding-right: 2.5rem;
-        }
-
         /* Enhanced dropdown interaction */
         .form-select:hover {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.5);
+            background: white;
+            border-color: var(--accent-gold);
             cursor: pointer;
         }
 
         /* Custom styling for dropdown when open */
         .form-select:focus-within {
-            background: rgba(168, 85, 247, 0.15);
+            background: white;
             box-shadow: 
-                0 0 0 3px rgba(168, 85, 247, 0.2),
-                0 10px 25px rgba(168, 85, 247, 0.3);
+                0 0 0 2px rgba(139, 107, 71, 0.1),
+                0 4px 8px rgba(139, 107, 71, 0.15);
         }
 
         /* Enhanced Response Styling */
         .formatted-response {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Crimson Text', serif;
             white-space: normal;
             line-height: 1.8;
         }
@@ -561,7 +731,7 @@
         .agent-response-block {
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid var(--glass-border);
+            border-top: 1px solid var(--border-color);
         }
 
         .agent-response-header {
@@ -571,15 +741,17 @@
         }
 
         .agent-response-name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            color: var(--neon-purple);
+            color: var(--accent-bronze);
+            font-family: 'Raleway', sans-serif;
         }
 
         .agent-response-description {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-top: 0.25rem;
+            font-style: italic;
         }
 
         .agent-response-body {
@@ -593,10 +765,11 @@
 
         /* Dialogue Styling */
         .dialogue-section {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 6px;
             padding: 1.5rem;
             margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
         }
 
         .dialogue-line {
@@ -608,65 +781,68 @@
 
         .dialogue-speaker {
             font-weight: 600;
-            color: var(--neon-blue);
+            color: var(--vintage-blue);
             min-width: 100px;
             text-align: right;
+            font-family: 'Raleway', sans-serif;
         }
 
         .dialogue-text {
             flex: 1;
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--paper-bg);
             padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--neon-blue);
+            border-radius: 4px;
+            border-left: 3px solid var(--vintage-blue);
+            font-style: italic;
         }
 
         /* Section Separator */
         .conversation-separator {
             height: 2px;
-            background: linear-gradient(to right, transparent, var(--neon-purple), transparent);
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
             margin: 2rem 0;
             position: relative;
         }
 
         .conversation-separator::after {
-            content: '✦';
+            content: '❦';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--dark-bg);
+            background: var(--warm-bg);
             padding: 0 1rem;
-            color: var(--neon-purple);
+            color: var(--accent-gold);
             font-size: 1.5rem;
         }
 
         /* Code Block Styling */
         .formatted-code-block {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: var(--paper-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
             padding: 1rem;
             margin: 1rem 0;
             overflow-x: auto;
+            box-shadow: inset 0 1px 3px rgba(139, 107, 71, 0.1);
         }
 
         .formatted-code-block code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: #58a6ff;
-            line-height: 1.5;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         /* Inline Code */
         .formatted-response code {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(139, 107, 71, 0.1);
             padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9em;
-            color: var(--neon-blue);
+            border-radius: 3px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.95em;
+            color: var(--accent-bronze);
         }
 
         /* Lists */
@@ -682,42 +858,45 @@
 
         /* Strong text */
         .formatted-response strong {
-            color: var(--neon-pink);
-            font-weight: 600;
+            color: var(--accent-bronze);
+            font-weight: 700;
         }
 
         /* Warning/Info boxes */
         .info-box {
-            background: rgba(79, 172, 254, 0.1);
-            border: 1px solid rgba(79, 172, 254, 0.3);
-            border-radius: 8px;
+            background: rgba(74, 93, 107, 0.1);
+            border: 1px solid var(--vintage-blue);
+            border-radius: 4px;
             padding: 1rem;
             margin: 1rem 0;
-            color: #79acfe;
+            color: var(--text-primary);
         }
 
         .warning-box {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 8px;
+            background: rgba(212, 165, 116, 0.15);
+            border: 1px solid var(--accent-gold);
+            border-radius: 4px;
             padding: 1rem;
             margin: 1rem 0;
-            color: #fbbf24;
+            color: var(--text-primary);
         }
 
         /* Initial Prompt Box */
         .initial-prompt-box {
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(139, 107, 71, 0.1) 0%, rgba(160, 130, 109, 0.1) 100%);
+            border: 1px solid var(--accent-bronze);
+            border-radius: 6px;
             padding: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .initial-prompt-label {
-            font-weight: 600;
-            color: var(--neon-purple);
+            font-weight: 700;
+            color: var(--accent-bronze);
             margin-bottom: 0.5rem;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         /* Persona icon */
@@ -727,11 +906,13 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background: var(--primary-gradient);
+            background: var(--accent-bronze);
             border-radius: 50%;
             margin-right: 1rem;
             font-size: 1.2rem;
             flex-shrink: 0;
+            color: white;
+            box-shadow: 0 2px 4px rgba(139, 107, 71, 0.2);
         }
 
         /* Thinking animation */
@@ -755,20 +936,36 @@
         /* Modal styling */
         .modal-content {
             background: var(--card-bg) !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
         }
 
         .modal-header {
-            border-bottom: 1px solid var(--glass-border) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(176, 141, 87, 0.1) 100%);
         }
 
         .modal-footer {
-            border-top: 1px solid var(--glass-border) !important;
+            border-top: 1px solid var(--border-color) !important;
         }
 
         .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(58, 35, 23, 0.6);
+        }
+
+        .modal-title {
+            font-family: 'Raleway', sans-serif;
+            color: var(--accent-bronze);
+            font-weight: 600;
+        }
+
+        .btn-close {
+            filter: none;
+            opacity: 0.6;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
         }
 
         /* Button group styling */
@@ -791,29 +988,57 @@
 
         /* Privacy Notice */
         .privacy-notice {
-            background: rgba(79, 172, 254, 0.1);
-            border: 1px solid rgba(79, 172, 254, 0.2);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(74, 93, 107, 0.1) 0%, rgba(107, 74, 93, 0.1) 100%);
+            border: 1px solid var(--vintage-blue);
+            border-radius: 6px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             color: var(--text-primary);
-            font-size: 0.9rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .privacy-notice::before {
+            content: '⚑';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+            color: var(--vintage-blue);
+            opacity: 0.3;
         }
 
         .privacy-notice i {
-            color: #79acfe;
+            color: var(--vintage-blue);
             margin-right: 0.5rem;
+        }
+
+        .auth-section {
+            text-align: right;
+            margin-bottom: 1rem;
+            font-family: 'Raleway', sans-serif;
         }
     </style>
 </head>
 <body>
     <div class="container mt-5">
+        <div class="auth-section">
+            {% if current_user.is_authenticated %}
+                <span class="me-3">Logged in as: <strong>{{ current_user.email }}</strong></span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-sm">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-sm">
+                    <i class="fab fa-google"></i> Login with Google
+                </a>
+            {% endif %}
+        </div>
+
         <!-- Creator Credit -->
         <div class="text-center mb-3">
-            <small class="text-secondary">
+            <small style="color: var(--text-secondary); font-family: 'Raleway', sans-serif; letter-spacing: 0.05em;">
                 Created by Yoni Bar 
-                <a href="https://www.linkedin.com/in/john-bar-42722921/" target="_blank" class="text-secondary ms-1" style="text-decoration: none;">
+                <a href="https://www.linkedin.com/in/john-bar-42722921/" target="_blank" style="color: var(--accent-bronze); text-decoration: none;">
                     <i class="fab fa-linkedin"></i>
                 </a>
             </small>
@@ -836,32 +1061,6 @@
         </div>
 
         <form id="main-form">
-            <div class="privacy-notice">
-                <i class="fas fa-shield-alt"></i>
-                <strong>Privacy Notice:</strong> This application requires a personal API key from the respective AI service providers. Data is sent directly from your browser to the AI service and is not stored or transmitted to us in any way. You're welcome to download the source code and run the application completely locally on your computer.
-            </div>
-            
-            <div class="glass-card">
-                <h3 class="mb-4"><i class="fas fa-key"></i> API Key Configuration</h3>
-                <p class="text-secondary mb-3" style="font-size: 0.9rem;">
-                    Provide API keys below to use for the conversation. If left blank, the application will attempt to use keys from your system's environment variables.
-                </p>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="gemini-api-key" class="form-label"><i class="fas fa-gem"></i> Gemini API Key</label>
-                        <input type="password" id="gemini-api-key" class="form-control" placeholder="Optional: Enter Gemini key">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="openai-api-key" class="form-label"><i class="fab fa-dev"></i> OpenAI API Key</label>
-                        <input type="password" id="openai-api-key" class="form-control" placeholder="Optional: Enter OpenAI key">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="anthropic-api-key" class="form-label"><i class="fas fa-robot"></i> Anthropic API Key</label>
-                        <input type="password" id="anthropic-api-key" class="form-control" placeholder="Optional: Enter Anthropic key">
-                    </div>
-                </div>
-            </div>
-
             <div class="glass-card">
                 <h3 class="mb-4">
                     <i class="fas fa-comments"></i> Conversation Selection
@@ -870,6 +1069,28 @@
                     <label for="conversation_name" class="form-label">
                         <i class="fas fa-folder-open"></i> Active Conversation
                     </label>
+                    <div class="row">
+                        <div class="col-md-7 mb-2">
+                            <select name="conversation_name" id="conversation_name" class="form-select model-select">
+                                {% for name in conversation_names %}
+                                <option value="{{ name }}" {% if name == selected_conversation %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-5 mb-2">
+                            <div class="conversation-controls">
+                                <button type="button" class="btn btn-success btn-sm" id="create-conversation-btn" title="Create new conversation">
+                                    <i class="fas fa-plus"></i> New
+                                </button>
+                                <button type="button" class="btn btn-primary btn-sm" id="edit-conversation-btn" title="Edit conversation name">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" id="delete-conversation-btn" title="Delete conversation">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-7 mb-2">
                             <select name="conversation_name" id="conversation_name" class="form-select model-select">
@@ -961,6 +1182,7 @@
             </h2>
             <p class="text-center text-secondary mb-4">Master the art of multi-agent conversation design</p>
 
+
             <h4><i class="fas fa-layer-group"></i> High-Level Overview</h4>
             <p>The configuration defines a set of conversational flows. Each flow, identified by a unique name, orchestrates a structured conversation between multiple AI "agents." These agents respond sequentially, each building upon the previous agent's response, to collaboratively address a user's prompt.</p>
 
@@ -981,17 +1203,8 @@
             <h6><i class="fas fa-brain"></i> "model"</h6>
             <p>Specifies which Large Language Model to use: "Gemini-2.5-pro", "Claude-Opus-4", "o3", or empty for default.</p>
 
-            <h6><i class="fas fa-arrow-right"></i> "prefix"</h6>
+            <h6><i class="fas fa-user-tag"></i> "Role"</h6>
             <p>A direct instruction defining the agent's primary role or goal.</p>
-
-            <h6><i class="fas fa-crosshairs"></i> "context"</h6>
-            <p>A reinforcing instruction for the agent, added after the conversation history.</p>
-
-            <h6><i class="fas fa-signature"></i> "suffix"</h6>
-            <p>A concluding statement attached to the agent's response.</p>
-
-            <h5><i class="fas fa-quote-right"></i> "closing_statement"</h5>
-            <p>A final statement to conclude the conversation.</p>
 
             <h4><i class="fas fa-code"></i> Examples</h4>
             
@@ -1002,20 +1215,15 @@
     "agents": [
       {
         "agent_name": "Tier 1 Support Bot",
-        "prefix": "Your job is to understand the user's issue and categorize it.",
-        "context": "Categorize as 'Technical', 'Billing', or 'General Inquiry'.",
-        "suffix": "",
+        "Role": "Your job is to understand the user's issue and categorize it.",
         "model": "Gemini-2.5-pro"
       },
       {
         "agent_name": "Technical Specialist",
-        "prefix": "You are a technical expert. Provide solutions for technical issues.",
-        "context": "Provide a clear, concise solution.",
-        "suffix": "Regards, Tech Support",
+        "Role": "You are a technical expert. Provide solutions for technical issues.",
         "model": "Claude-Opus-4"
       }
-    ],
-    "closing_statement": "Thank you for contacting support."
+    ]
   }
 }</code></pre>
 
@@ -1026,20 +1234,15 @@
      "agents": [
        {
          "agent_name": "The Plotter",
-         "prefix": "Based on the user's prompt, outline a three-act plot.",
-         "context": "Focus on creating a clear beginning, middle, and end.",
-         "suffix": "--- Plot Outline Complete ---",
+         "Role": "Based on the user's prompt, outline a three-act plot.",
          "model": "o3"
        },
        {
          "agent_name": "The Narrator",
-         "prefix": "Take the plot outline and write the full story.",
-         "context": "Write an engaging narrative.",
-         "suffix": "The End.",
+         "Role": "Take the plot outline and write the full story.",
          "model": "Claude-Opus-4"
        }
-     ],
-     "closing_statement": ""
+     ]
    }
  }</code></pre>
 
@@ -1066,7 +1269,7 @@
                  <li><strong>Use the Second-Person Imperative:</strong> Always frame instructions as a direct command: <code>You are a...</code> or <code>Your task is to...</code>. This is more effective than the first-person (<code>I am a...</code>).</li>
                  <li><strong>Give Names and Personas:</strong> Assigning human-like names (e.g., "Alice the Analyst") makes the AI's behavior more consistent and the dialogue easier to follow. The model is better at maintaining a distinct persona for a named character.</li>
                  <li><strong>Add Rich Personal Details:</strong> Include hobbies, background, and personal characteristics in your agent descriptions (e.g., "Michael, a 40-year-old doctor who loves gardening and classical music"). Research shows this creates more believable, consistent agent behavior and improves multi-agent interactions significantly.</li>
-                 <li><strong>Be Specific & Contextual:</strong> The <code>prefix</code> should be a crystal-clear instruction. Use the <code>opening_statement</code> to provide universal context that all agents need, keeping them aligned.</li>
+                 <li><strong>Be Specific & Contextual:</strong> The <code>Role</code> should be a crystal-clear instruction. Use the <code>opening_statement</code> to provide universal context that all agents need, keeping them aligned.</li>
              </ul>
              
              <h5><i class="fas fa-vial"></i> 4. Iterate and Refine</h5>
@@ -1090,6 +1293,8 @@
     let currentAbortController = null;
     let currentConversationId = null;
     let isPaused = false;
+    // Track if any error occurred during the conversation run
+    let errorsOccurred = false;
     
     try {
         const configJsonString = document.getElementById('config-data').textContent.trim();
@@ -1181,6 +1386,62 @@
                 }
             });
         }
+
+        // Add event listener for create conversation button
+        const createConvBtn = document.getElementById('create-conversation-btn');
+        if (createConvBtn) {
+            createConvBtn.addEventListener('click', showCreateConversationModal);
+        }
+
+        // Add event listener for edit conversation button
+        const editConvBtn = document.getElementById('edit-conversation-btn');
+        if (editConvBtn) {
+            editConvBtn.addEventListener('click', showEditConversationModal);
+        }
+
+        // Add event listener for delete conversation button
+        const deleteConvBtn = document.getElementById('delete-conversation-btn');
+        if (deleteConvBtn) {
+            deleteConvBtn.addEventListener('click', showDeleteConversationModal);
+        }
+
+        // Add event listener for confirm create button in modal
+        const confirmCreateBtn = document.getElementById('confirm-create-conversation');
+        if (confirmCreateBtn) {
+            confirmCreateBtn.addEventListener('click', createNewConversation);
+        }
+
+        // Add event listener for confirm edit button in modal
+        const confirmEditBtn = document.getElementById('confirm-edit-conversation');
+        if (confirmEditBtn) {
+            confirmEditBtn.addEventListener('click', editConversation);
+        }
+
+        // Add event listener for confirm delete button in modal
+        const confirmDeleteBtn = document.getElementById('confirm-delete-conversation');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', deleteConversation);
+        }
+
+        // Add enter key support for conversation name input
+        const newConvNameInput = document.getElementById('new-conversation-name');
+        if (newConvNameInput) {
+            newConvNameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    createNewConversation();
+                }
+            });
+        }
+
+        // Add enter key support for edit conversation name input
+        const editConvNameInput = document.getElementById('edit-conversation-name');
+        if (editConvNameInput) {
+            editConvNameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    editConversation();
+                }
+            });
+        }
     });
 
     function renderEditor(convName) {
@@ -1190,6 +1451,12 @@
             console.error(`renderEditor failed: No data found for conversation name '${convName}'.`);
             editor.innerHTML = '<div class="glass-card"><p class="text-danger text-center"><i class="fas fa-exclamation-triangle"></i> Error: Could not find configuration for the selected conversation.</p></div>';
             return;
+        }
+        
+        // Update the conversation name input if it exists
+        const convNameInput = document.getElementById('conversation-name-input');
+        if (convNameInput) {
+            convNameInput.value = convName;
         }
         
         // Update the conversation name input if it exists
@@ -1236,21 +1503,9 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" title="A direct instruction defining the agent's primary role">
-                            <i class="fas fa-arrow-right"></i> Prefix
+                            <i class="fas fa-user-tag"></i> Role
                         </label>
-                        <textarea class="form-control" rows="2" data-config-key="prefix">${agent.prefix || ''}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" title="A reinforcing instruction for the agent">
-                            <i class="fas fa-crosshairs"></i> Context
-                        </label>
-                        <textarea class="form-control" rows="3" data-config-key="context">${agent.context || ''}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" title="A concluding statement attached to the agent's response">
-                            <i class="fas fa-signature"></i> Suffix
-                        </label>
-                        <textarea class="form-control" rows="2" data-config-key="suffix">${agent.suffix || ''}</textarea>
+                        <textarea class="form-control" rows="2" data-config-key="Role">${agent.Role || ''}</textarea>
                     </div>
                 </div>
             </div>
@@ -1289,18 +1544,6 @@
                     </button>
                 </div>
             </div>
-            
-            <div class="glass-card">
-                <h3 class="mb-4">
-                    <i class="fas fa-quote-right"></i> Closing Configuration
-                </h3>
-                <div class="mb-3">
-                    <label class="form-label" title="A final statement appended at the very end">
-                        <i class="fas fa-flag-checkered"></i> Closing Statement
-                    </label>
-                    <textarea class="form-control" id="closing-statement-input" rows="3">${conversation.closing_statement || ''}</textarea>
-                </div>
-            </div>
         `;
 
         editor.innerHTML = editorHtml;
@@ -1308,21 +1551,50 @@
         attachEditorEventListeners();
     }
     
+    function updateConfigDataFromEditor() {
+        console.log(`Updating configData in memory from editor for: ${currentConversationName}`);
+        if (!currentConversationName || !configData[currentConversationName]) {
+            console.warn("Cannot update config from editor: no valid conversation selected.");
+            return;
+        }
+
+        const conversation = configData[currentConversationName];
+
+        const openingStatementInput = document.getElementById('opening-statement-input');
+        if (openingStatementInput) {
+            conversation.opening_statement = openingStatementInput.value;
+        }
+        
+        const updatedAgents = [];
+        document.querySelectorAll('#agents-container .agent-card[data-agent-index]').forEach(agentCard => {
+            const agent = {};
+            agentCard.querySelectorAll('[data-config-key]').forEach(input => {
+                agent[input.dataset.configKey] = input.value;
+            });
+            updatedAgents.push(agent);
+        });
+        conversation.agents = updatedAgents;
+
+        console.log("configData updated from editor state:", JSON.parse(JSON.stringify(configData[currentConversationName])));
+    }
+
     function attachEditorEventListeners() {
         console.log("Attaching editor event listeners...");
         const addAgentBtn = document.getElementById('add-agent-btn');
         if (addAgentBtn) {
             addAgentBtn.addEventListener('click', () => {
                 console.log(`'Add Agent' button clicked for conversation: '${currentConversationName}'`);
+                
+                // First, update the config data from the current state of the editor UI
+                updateConfigDataFromEditor();
+
                 if (!configData[currentConversationName].agents) {
                     console.log("Agent array did not exist, creating it.");
                     configData[currentConversationName].agents = [];
                 }
                 const newAgent = {
                     agent_name: "New Agent",
-                    prefix: "",
-                    context: "",
-                    suffix: "",
+                    Role: "",
                     model: ""
                 };
                 configData[currentConversationName].agents.push(newAgent);
@@ -1338,6 +1610,10 @@
                 const agentCard = e.target.closest('.agent-card[data-agent-index]');
                 const index = parseInt(agentCard.dataset.agentIndex, 10);
                 console.log(`'Remove Agent' button clicked for agent at index: ${index}`);
+
+                // First, update the config data from the current state of the editor UI
+                updateConfigDataFromEditor();
+                
                 if (configData[currentConversationName] && configData[currentConversationName].agents) {
                     configData[currentConversationName].agents.splice(index, 1);
                     console.log(`Agent at index ${index} removed. Rerendering editor.`);
@@ -1397,7 +1673,6 @@
 
         const newConversationData = {
             opening_statement: document.getElementById('opening-statement-input').value,
-            closing_statement: document.getElementById('closing-statement-input').value,
             agents: []
         };
         console.log("Built base conversation data from opening/closing statements:", newConversationData);
@@ -1458,6 +1733,23 @@
             });
             select.value = currentConversationName;
         }
+        if (newListOfNames.length === 0) {
+            // Handle empty case
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'No conversations available';
+            select.appendChild(option);
+            select.disabled = true;
+        } else {
+            select.disabled = false;
+            newListOfNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+            select.value = currentConversationName;
+        }
         console.log(`Dropdown updated. Current value is set to: '${select.value}'`);
     }
 
@@ -1478,13 +1770,16 @@
         const finalResponseBox = document.getElementById('final-response-box');
         const developerCreditSection = document.getElementById('developer-credit-section');
         
-        // Check if final response has meaningful content (not empty, not just "Thinking...")
-        if (finalResponseBox && developerCreditSection && finalResponseBox.innerHTML.trim()) {
-            const responseText = finalResponseBox.textContent || finalResponseBox.innerText || '';
-            if (responseText.trim() && responseText.trim() !== 'Thinking...') {
-                console.log("Final response populated, showing developer credit");
-                developerCreditSection.style.display = 'block';
-            }
+        if (!finalResponseBox || !developerCreditSection) return;
+
+        const responseText = (finalResponseBox.textContent || finalResponseBox.innerText || '').trim();
+
+        // Conditions for success: non-empty, not the placeholder, and not an error message
+        const isLikelyError = /^(error|fatal|warning|stopped)/i.test(responseText);
+        const hasContent = responseText && responseText !== 'Thinking...';
+
+        if (hasContent && !isLikelyError && !errorsOccurred) {
+            developerCreditSection.style.display = 'block';
         }
     }
 
@@ -1562,6 +1857,8 @@
         
         // Hide developer credit at start of conversation
         hideDeveloperCredit();
+        // Reset error flag at the beginning of a new run
+        errorsOccurred = false;
 
         const finalConfig = updateAndGetFinalConfig();
         const prompt = document.getElementById('prompt').value;
@@ -1570,11 +1867,7 @@
             prompt: prompt,
             conversation_name: currentConversationName,
             config: finalConfig,
-            api_keys: {
-                gemini: document.getElementById('gemini-api-key').value,
-                openai: document.getElementById('openai-api-key').value,
-                anthropic: document.getElementById('anthropic-api-key').value
-            }
+            api_keys: {}  // API keys are now handled server-side
         };
         console.log("Payload for streaming:", payload);
 
@@ -1627,6 +1920,9 @@
                             } else if (data.type === 'error') {
                                 console.error("SSE Error:", data.message);
                                 historyResponseBox.innerHTML += `<div class="warning-box"><strong>ERROR:</strong> ${escapeHtml(data.message)}</div>`;
+                                // Mark that an error has occurred and hide developer credit
+                                errorsOccurred = true;
+                                hideDeveloperCredit();
                                 resetRunButton();
                             } else if (data.type === 'done') {
                                 console.log("SSE stream finished.");
@@ -1871,14 +2167,11 @@
         // Create new conversation with default structure
         const newConversation = {
             opening_statement: "",
-            closing_statement: "",
             agents: [
                 {
                     agent_name: "Agent 1",
                     model: "",
-                    prefix: "",
-                    context: "",
-                    suffix: ""
+                    Role: ""
                 }
             ]
         };
@@ -2104,6 +2397,80 @@
         });
     }
 </script>
+
+<!-- New Conversation Modal -->
+<div class="modal fade" id="newConversationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--glass-border);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                <h5 class="modal-title" style="color: var(--text-primary);">
+                    <i class="fas fa-plus-circle"></i> Create New Conversation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="new-conversation-name" class="form-label">Conversation Name</label>
+                    <input type="text" class="form-control" id="new-conversation-name" placeholder="Enter a unique name for the conversation">
+                    <div class="form-text" style="color: var(--text-secondary);">This name will be used to identify your conversation configuration.</div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--glass-border);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-create-conversation">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Conversation Modal -->
+<div class="modal fade" id="editConversationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--glass-border);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                <h5 class="modal-title" style="color: var(--text-primary);">
+                    <i class="fas fa-edit"></i> Edit Conversation Name
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-conversation-name" class="form-label">New Conversation Name</label>
+                    <input type="text" class="form-control" id="edit-conversation-name" placeholder="Enter new name for the conversation">
+                    <div class="form-text" style="color: var(--text-secondary);">Current name: <span id="current-conversation-name"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--glass-border);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-edit-conversation">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Conversation Modal -->
+<div class="modal fade" id="deleteConversationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--glass-border);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                <h5 class="modal-title" style="color: var(--text-primary);">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger-red);"></i> Delete Conversation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-primary);">Are you sure you want to delete the conversation "<strong id="delete-conversation-name"></strong>"?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--glass-border);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-conversation">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- New Conversation Modal -->
 <div class="modal fade" id="newConversationModal" tabindex="-1" aria-hidden="true">

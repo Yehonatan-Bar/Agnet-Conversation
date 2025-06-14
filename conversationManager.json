@@ -1,56 +1,77 @@
 {
-    "test_session": {
-        "opening_statement": "opening_statement - This is a test session, in it the responses will be two words: 'Model response' ",
-        "closing_statement": "closing_statement - Testing session complete. All test results and findings have been documented.",
+    "test": {
+        "opening_statement": "test",
         "agents": [
             {
-                "agent_name": "Michael 1",
+                "agent_name": "Agent 1",
                 "model": "",
-                "prefix": "prefix - As Test Planner num 1",
-                "context": "context - Test Planner num 1",
-                "suffix": "suffix - Test Planner num 1"
-            },
-            {
-                "agent_name": "Sarah 2",
-                "model": "o3",
-                "prefix": "prefix - As Test Executor num 2",
-                "context": "context - Test Executor num 2",
-                "suffix": "suffix - Test Executor num 2"
-            },
-            {
-                "agent_name": "David 3",
-                "model": "Claude-Opus-4",
-                "prefix": "prefix - As Test Executor num 3",
-                "context": "context - Test Executor num 3",
-                "suffix": "suffix - Test Executor num 3"
+                "Role": "test"
             }
         ]
     },
-    "test_session_2": {
+    "test_session": {
         "agents": [
             {
-                "agent_name": "Michael, 40-year-old doctor who loves gardening",
-                "context": "As a software engineer, you will now focus on the user's request and help them with their request",
-                "model": "",
-                "prefix": "A software engineer, who's goal is to help the user with their request:",
-                "suffix": "This was Michael's response"
+                "Role": "A software engineer, who's goal is to help the user with their request:",
+                "agent_name": "Michael",
+                "model": ""
             },
             {
-                "agent_name": "Sarah, 35-year-old UX designer who practices yoga",
-                "context": "As a UX designer, you will focus on the user experience aspects of the request and provide insights on usability and design",
-                "model": "Claude-Opus-4",
-                "prefix": "A user experience designer, who's goal is to ensure the solution is user-friendly and accessible:",
-                "suffix": "This was Sarah's response"
+                "Role": "A user experience designer, who's goal is to ensure the solution is user-friendly and accessible:",
+                "agent_name": "Sarah",
+                "model": "Claude-Opus-4"
             },
             {
-                "agent_name": "David, 45-year-old project manager who enjoys hiking",
-                "context": "As a project manager, you will consider the feasibility, timeline, and resource requirements for implementing the user's request",
-                "model": "Gemini-2.5-pro",
-                "prefix": "A project manager, who's goal is to ensure the solution is practical and deliverable:",
-                "suffix": "This was David's response"
+                "Role": "A project manager, who's goal is to ensure the solution is practical and deliverable:",
+                "agent_name": "David",
+                "model": "Gemini-2.5-pro"
             }
         ],
-        "closing_statement": "closing_statement - Testing session complete. All test results and findings have been documented.",
         "opening_statement": "You are all participating in a conversation about the best way to respond to the user's request. The attendees are: Michael, Sarah and David. "
+    },
+    "test_session22": {
+        "agents": [
+            {
+                "Role": "prefix - As Test Planner num 1",
+                "agent_name": "Michael 1",
+                "model": "Claude-Opus-4"
+            },
+            {
+                "Role": "prefix - As Test Executor num 2",
+                "agent_name": "Sarah 2",
+                "model": "o3"
+            },
+            {
+                "Role": "prefix - As Test Executor num 3",
+                "agent_name": "David 3",
+                "model": "Gemini-2.5-pro"
+            }
+        ],
+        "opening_statement": "opening_statement - This is a test session, in it the responses will be two words: 'Model response' "
+    },
+    "\u05de\u05d4 \u05d4\u05e4\u05ea\u05e8\u05d5\u05df \u05dc\u05e1\u05d9\u05e1\u05db\u05d5\u05da \u05d4\u05d9\u05e9\u05e8\u05d0\u05dc\u05d9 \u05e4\u05dc\u05e1\u05d8\u05d9\u05e0\u05d9": {
+        "agents": [
+            {
+                "Role": "\u05d0\u05ea\u05d4 \u05e2\u05d9\u05ea\u05e0\u05d5\u05d0\u05d9 \u05e9\u05de\u05e1\u05ea\u05db\u05dc \u05de\u05d4\u05d6\u05d5\u05d5\u05d9\u05ea \u05d4\u05d9\u05de\u05e0\u05d9\u05ea ",
+                "agent_name": "\u05e2\u05de\u05d9\u05ea \u05e1\u05d2\u05dc",
+                "model": "Gemini-2.5-pro"
+            },
+            {
+                "Role": "\u05d0\u05ea\u05d4 \u05e0\u05e9\u05d9\u05d0 \u05d0\u05e8\u05e6\u05d5\u05ea \u05d4\u05d1\u05e8\u05d9\u05ea, \u05d5\u05d0\u05db\u05e4\u05ea \u05dc\u05da \u05e8\u05e7 \u05de\u05db\u05e1\u05e3",
+                "agent_name": "\u05d3\u05d5\u05dc\u05e0\u05d3 \u05d8\u05d0\u05e8\u05de\u05e4",
+                "model": "Gemini-2.5-pro"
+            },
+            {
+                "Role": "\u05d0\u05ea\u05d4 \u05d7\u05d5\u05dc\u05dd \u05d1\u05d2\u05d3\u05d5\u05dc, \u05e2\u05e9\u05d9\u05e8, \u05d5\u05d0\u05d9\u05de\u05e4\u05d5\u05dc\u05d9\u05e1\u05d1\u05d9",
+                "agent_name": "\u05d0\u05dc\u05d5\u05df \u05de\u05d0\u05e1\u05e7",
+                "model": ""
+            },
+            {
+                "Role": "\u05d0\u05ea\u05d4 \u05e4\u05e9\u05d5\u05d8 \u05de\u05d3\u05d9\u05e0\u05d0\u05d9 \u05de\u05de\u05e9 \u05d7\u05db\u05dd, \u05e1\u05db\u05dd \u05d0\u05ea  \u05d4\u05d3\u05d1\u05e8\u05d9\u05dd",
+                "agent_name": "\u05de\u05e9\u05d4 \u05db\u05d4\u05df",
+                "model": ""
+            }
+        ],
+        "opening_statement": "\u05d0\u05ea\u05dd \u05d7\u05d1\u05d5\u05e8\u05ea \u05de\u05d3\u05d9\u05e0\u05d0\u05d9\u05dd \u05d7\u05db\u05de\u05d9\u05dd \u05d5\u05de\u05d3\u05d5\u05e4\u05dc\u05de\u05d9\u05dd"
     }
 }
